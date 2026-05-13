@@ -1,0 +1,20 @@
+services:
+  libraryit-server:
+    build: .
+    container_name: libraryit-server
+    ports:
+      - "1445:445"
+    volumes:
+      - ./data:/libraryit:z
+      - ./logs:/logs:z
+    restart: unless-stopped
+
+  libraryit-logger:
+    image: alpine:3.20
+    container_name: libraryit-logger
+    depends_on:
+      - libraryit-server
+    volumes:
+      - ./logs:/logs:z
+    command: sh -c "touch /logs/libraryit.log || true; chmod 666 /logs/libraryit.log || true; exec tail -f /logs/libraryit.log"
+    restart: unless-stopped
