@@ -1145,16 +1145,3 @@ Jika folder tersebut sudah pernah masuk tracking Git, hapus dari tracking tanpa 
 git rm -r --cached soal_3/data soal_3/logs 2>/dev/null || true
 git add .
 ```
-
----
-
-## Kesimpulan
-
-Pada praktikum Modul 4 ini, saya mempelajari implementasi filesystem dan Docker melalui tiga bagian utama.
-
-Pada soal 1, FUSE digunakan untuk membuat file virtual `tujuan.txt` yang isinya dibentuk secara dinamis dari beberapa file sumber. Melalui soal ini, saya memahami bagaimana operasi dasar FUSE seperti `getattr`, `readdir`, `open`, dan `read` digunakan untuk membuat filesystem userspace.
-
-Pada soal 2, FUSE digunakan untuk membuat filesystem dengan enkripsi sederhana berbasis XOR, sedangkan Docker digunakan untuk menjalankan server database sederhana. Melalui soal ini, saya memahami bagaimana file dapat ditampilkan berbeda antara mount point dan storage asli, serta bagaimana aplikasi server dapat dipaketkan ke dalam Docker image.
-
-Pada soal 3, Docker dan Samba digunakan untuk membangun file server LibraryIT dengan user, grup, permission, persistent storage, dan logging. Melalui soal ini, saya memahami bagaimana bind mount menjaga data tetap persisten, bagaimana permission Linux dan konfigurasi Samba saling mempengaruhi, serta bagaimana log aktivitas dapat dipantau melalui service container terpisah.
-
