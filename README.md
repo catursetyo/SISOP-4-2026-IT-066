@@ -1126,22 +1126,3 @@ container dapat berhenti setelah koneksi `smbclient`, sehingga muncul error `NT_
 ```bash
 exec smbd -F --no-process-group
 ```
-
-### Membersihkan Repository Sebelum Commit
-
-Karena folder `data/` dan `logs/` merupakan hasil runtime, keduanya sebaiknya tidak ikut di-commit.
-
-Contoh `.gitignore`:
-
-```gitignore
-soal_3/data/
-soal_3/logs/
-soal_3/test.txt
-```
-
-Jika folder tersebut sudah pernah masuk tracking Git, hapus dari tracking tanpa menghapus file lokal:
-
-```bash
-git rm -r --cached soal_3/data soal_3/logs 2>/dev/null || true
-git add .
-```
