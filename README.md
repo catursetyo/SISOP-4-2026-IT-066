@@ -239,41 +239,6 @@ static int kenz_read(
 
 Jika path yang dibaca adalah `/tujuan.txt`, maka isi file dibuat menggunakan `generate_tujuan()`. Program juga memperhatikan `offset` dan `size` agar pembacaan sesuai dengan mekanisme FUSE.
 
-### Menjalankan Program
-
-Contoh kompilasi:
-
-```bash
-gcc kenz_rescue.c -o kenz_rescue $(pkg-config fuse3 --cflags --libs)
-```
-
-Membuat folder mount:
-
-```bash
-mkdir -p source_dir mount_dir
-```
-
-Menjalankan filesystem:
-
-```bash
-./kenz_rescue source_dir mount_dir
-```
-
-Membaca file virtual:
-
-```bash
-cat mount_dir/tujuan.txt
-```
-
-Unmount filesystem:
-
-```bash
-fusermount3 -u mount_dir
-```
-
-#### Contoh output:
-<img src="/assets/soal1-a.png">
-
 ---
 
 ## Soal 2: MooFS dan Dockerized DB Server
@@ -485,54 +450,6 @@ int main(int argc, char *argv[]) {
 
 Program mengambil path storage dari environment variable `MOO_STORAGE`. Jika tidak ada, maka default storage yang digunakan adalah `encrypted_storage`.
 
-### Menjalankan FUSE
-
-Contoh kompilasi:
-
-```bash
-gcc fuse.c -o moofs $(pkg-config fuse --cflags --libs)
-```
-
-Membuat storage dan mount point:
-
-```bash
-mkdir -p encrypted_storage mount_dir
-```
-
-Menjalankan filesystem:
-
-```bash
-MOO_STORAGE=encrypted_storage ./moofs mount_dir
-```
-
-Menulis file melalui mount point:
-
-```bash
-echo "halo moo" > mount_dir/test.txt
-```
-
-Cek file asli di storage:
-
-```bash
-ls encrypted_storage
-cat encrypted_storage/test.txt.enc
-```
-
-Membaca kembali melalui mount point:
-
-```bash
-cat mount_dir/test.txt
-```
-
-Unmount:
-
-```bash
-fusermount -u mount_dir
-```
-
-#### Contoh output:
-<img src="/assets/soal2-a.png">
-
 ### Dockerized DB Server
 
 Selain FUSE, terdapat server database sederhana yang dijalankan melalui Docker. Server berjalan pada port `9000` dan menyimpan data pada direktori `/app/db`.
@@ -591,32 +508,6 @@ int ready = select(maxfd + 1, &readfds, NULL, NULL, NULL);
 
 Jika ada input dari terminal, client akan mengirimkan input tersebut ke server. Jika ada response dari server, client akan menampilkan response ke terminal.
 
-### Menjalankan Server dan Client
-
-Build image:
-
-```bash
-docker build -t db-server .
-```
-
-Jalankan container:
-
-```bash
-docker run -d --name db-server -p 9000:9000 db-server
-```
-
-Compile client:
-
-```bash
-gcc client.c -o client
-```
-
-Jalankan client:
-
-```bash
-./client 127.0.0.1 9000
-```
-
 Contoh command:
 
 ```text
@@ -629,9 +520,6 @@ LIST DATABASE
 LIST TABLE sisop
 DROP DATABASE sisop
 ```
-
-#### Contoh output:
-<img src="/assets/soal2-b.png">
 
 ---
 
@@ -976,30 +864,6 @@ Parser Python kemudian membaca `audit.raw` dan menulis ulang log ke format yang 
 
 Aktivitas normal seperti `CONNECT` dan `WRITE` dicatat sebagai `INFO`, sedangkan percobaan akses yang gagal dicatat sebagai `WARNING`.
 
-### Menjalankan Container
-
-Karena environment menggunakan Compose versi lama, perintah yang digunakan adalah:
-
-```bash
-docker-compose up --build -d
-```
-
-Jika ingin rebuild ulang dari awal:
-
-```bash
-docker-compose down
-docker-compose up --build --force-recreate -d
-```
-
-Cek container:
-
-```bash
-docker ps
-```
-
-#### Contoh output:
-<img src="/assets/soal3-a.png">
-
 ### Pengujian Sub-soal A
 
 Sub-soal A menguji apakah user, grup, dan struktur direktori berhasil dibuat otomatis.
@@ -1022,9 +886,6 @@ docs ebooks papers sourcecode
 ```
 
 Perintah `pdbedit -L` digunakan untuk memastikan user Samba sudah terdaftar. Perintah `getent group staff readonly` digunakan untuk memastikan pembagian grup sudah benar. Perintah `ls /libraryit/` digunakan untuk memastikan empat direktori koleksi sudah tersedia.
-
-#### Contoh output:
-<img src="/assets/soal3-b.png">
 
 ### Pengujian Sub-soal B
 
@@ -1076,9 +937,6 @@ putting file test.txt as \test.txt
 ```
 
 Dengan pengujian tersebut, terbukti bahwa `contributor` yang termasuk grup `staff` tetap tidak dapat menulis ke `docs`, sedangkan `librarian` secara spesifik dapat menulis karena berada pada `write list`.
-
-#### Contoh output:
-<img src="/assets/soal3-c.png">
 
 ### Pengujian Sub-soal C
 
@@ -1140,9 +998,6 @@ NT_STATUS_ACCESS_DENIED opening remote file \hello_world.py
 
 Dengan demikian, data tetap berada di host melalui bind mount, tetapi akses langsung dari host dan akses melalui Samba tetap mengikuti aturan yang diminta.
 
-#### Contoh output:
-<img src="/assets/soal3-d.png">
-
 ### Pengujian Sub-soal D
 
 Sub-soal D menguji pencatatan log aktivitas Samba.
@@ -1184,9 +1039,6 @@ atau:
 ```bash
 tail -f ./logs/libraryit.log
 ```
-
-#### Contoh output:
-<img src="/assets/soal3-e.png">
 
 ### Kendala dan Revisi
 
